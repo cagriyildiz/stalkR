@@ -1,7 +1,15 @@
 const express = require('express');
+const webpush = require('web-push');
+const bodyParser = require('body-parser');
 const scraper = require('./services/scraper.js');
+const path = require('path');
+const applicationConstants = require('./constants/constants.js');
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, 'client')));
+
+app.use(bodyParser.json());
 
 app.get('/instagram/all', async (req, res, next) => {
     const username = req.query.username;
@@ -16,11 +24,17 @@ app.get('/instagram/user', async (req, res, next) => {
     res.json(userObj);
 });
 
-app.get('/instagram/stalk-privacy', async (req, res, next) => {
-    const username = req.query.username;
-    const currentPrivacy = scraper.isProfilePrivate(username);
-    const accountPrivacy = currentPrivacy ? 'private' : 'public';
-    res.send('Account is [' + accountPrivacy + '] at the moment: ' + new Date);
+app.post('/instagram/stalk-privacy', async (req, res) => {
+    const requestBody = req.body;
+    console.log('stalking ' + requestBody.username + '\'s account privacy...');
+    scraper.isProfilePrivate(requestBody.username, requestBody.subscription);
+    res.status(201).json({});
 });
+
+webpush.setVapidDetails(
+    'mailto:cagriyild@gmail.com',
+    applicationConstants.publicVapidKey,
+    applicationConstants.privateVapidKey
+);
 
 app.listen(3002);

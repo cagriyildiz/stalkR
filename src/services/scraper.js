@@ -1,4 +1,5 @@
 const axios = require('axios');
+const webpush = require('web-push');
 const cron = require('node-cron');
 
 getInstagramGlobalObj = async (username) => {
@@ -13,7 +14,7 @@ getInstagramGlobalObj = async (username) => {
     return JSON.parse(sharedData);
 }
 
-isProfilePrivate = async (username) => {
+isProfilePrivate = async (username, subscription) => {
     const currentObj = await getInstagramGlobalObj(username);
     const currentUserObj = currentObj.entry_data.ProfilePage[0].graphql.user;
     let currentPrivacy = currentUserObj.is_private;
@@ -24,11 +25,21 @@ isProfilePrivate = async (username) => {
         if (currentPrivacy != isPrivate) {
             currentPrivacy = isPrivate;
             const accountPrivacy = currentPrivacy ? 'private' : 'public';
-            console.log(username + ' has just changed the account privacy: [' + accountPrivacy + ' account]');
-            // TODO: inform the stalker that the account privacy has changed by sending notification...
+            console.log('account ' + username + ' is ' + accountPrivacy + ' now!');
+            sendNotification(subscription, username, accountPrivacy);
         }
     });
-    return currentPrivacy;
+}
+
+sendNotification = (subscription, username, privacy) => {
+    const payload = JSON.stringify({
+        'title': 'Account Privacy Changed!',
+        'username': username,
+        'privacy': privacy
+    });
+    webpush
+        .sendNotification(subscription, payload)
+        .catch(err => console.error(err));
 }
 
 module.exports = {
