@@ -25,6 +25,9 @@ isProfilePrivate = async (username, subscription) => {
         if (currentPrivacy != isPrivate) {
             currentPrivacy = isPrivate;
             const accountPrivacy = currentPrivacy ? 'private' : 'public';
+            if (!currentPrivacy) {
+                // TODO: save informations to DB
+            }
             console.log('account ' + username + ' is ' + accountPrivacy + ' now!');
             sendNotification(subscription, username, accountPrivacy);
         }
