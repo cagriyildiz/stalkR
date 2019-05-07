@@ -1,18 +1,18 @@
-const applicationConstants = {
-    publicVapidKey: 'BO63ZpuWXywGDzc_3MbCHqvHSlsl-9lsw36Y_f3kI6gBDNosm4sylFCsv2WrxTEHbWDlObrsZv-nir77ktL7jc8'
-}
+fetch('/webpush/vapid-key')
+.then(response => response.json())
+.then(data => {
+    if ('serviceWorker' in navigator) {
+        send(data).catch(err => console.error(err));
+    }
+});
 
-if ('serviceWorker' in navigator) {
-    send().catch(err => console.error(err));
-}
-
-async function send() {
+async function send(publicVapidKey) {
     const register = await navigator.serviceWorker.register('/worker.js', {
         scope: '/'
     });
     const subscription = await register.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(applicationConstants.publicVapidKey)
+        applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
     });
     await fetch('/instagram/stalk-privacy', {
         method: 'POST',
