@@ -1,6 +1,9 @@
 const axios = require('axios');
 const webpush = require('web-push');
 const cron = require('node-cron');
+const mongoose = require('mongoose');
+
+const Picture = require('../api/models/picture')
 
 getInstagramGlobalObj = async (username) => {
     const html = await axios.get('https://www.instagram.com/' + username);
@@ -25,13 +28,34 @@ isProfilePrivate = async (username, subscription) => {
         if (currentPrivacy != isPrivate) {
             currentPrivacy = isPrivate;
             const accountPrivacy = currentPrivacy ? 'private' : 'public';
-            if (!currentPrivacy) {
+            if (!currentPrivacy) { // if profile is public
                 // TODO: save informations to DB
+                console.log('saving images to database...');
+                saveInformationsToDB(userObj, username);
             }
             console.log('account ' + username + ' is ' + accountPrivacy + ' now!');
             sendNotification(subscription, username, accountPrivacy);
         }
     });
+}
+
+saveInformationsToDB = (userObj, username) => {
+    const timelineMedia = userObj.edge_owner_to_timeline_media;
+    const mediaCount = timelineMedia.count;
+    const lazyMedia = timelineMedia.edges;
+    const lazyMediaCount = lazyMedia.length;
+    for (let media of lazyMedia) {
+        let imgUrl = media.node.display_url;
+        let picture = new Picture({
+            _id: mongoose.Types.ObjectId(),
+            user: username,
+            url: imgUrl
+        });
+        picture
+            .save()
+            .then(result => console.log(result))
+            .catch(err => console.log(err));
+    }
 }
 
 sendNotification = (subscription, username, privacy) => {
