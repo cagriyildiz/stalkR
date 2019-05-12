@@ -29,7 +29,6 @@ isProfilePrivate = async (username, subscription) => {
             currentPrivacy = isPrivate;
             const accountPrivacy = currentPrivacy ? 'private' : 'public';
             if (!currentPrivacy) { // if profile is public
-                // TODO: save informations to DB
                 console.log('saving images to database...');
                 saveInformationsToDB(userObj, username);
             }
@@ -45,9 +44,10 @@ saveInformationsToDB = (userObj, username) => {
     const lazyMedia = timelineMedia.edges;
     const lazyMediaCount = lazyMedia.length;
     for (let media of lazyMedia) {
+        let imgId = media.node.id;
         let imgUrl = media.node.display_url;
         let picture = new Picture({
-            _id: mongoose.Types.ObjectId(),
+            _id: imgId,
             user: username,
             url: imgUrl
         });
