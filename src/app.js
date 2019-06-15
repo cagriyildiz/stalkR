@@ -10,7 +10,7 @@ const instagramRoutes = require('./api/routes/instagram');
 const webpushRoutes = require('./api/routes/webpush');
 
 mongoose.connect(
-    'mongodb+srv://cagriyildiz:' 
+    'mongodb+srv://' + process.env.MONGO_ATLAS_SRV + ':' 
     + process.env.MONGO_ATLAS_PW 
     + '@stalkr-xrauw.mongodb.net/test?retryWrites=true', 
     { useNewUrlParser: true }
