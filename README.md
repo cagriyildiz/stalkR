@@ -1,6 +1,6 @@
 # stalkR
 
-StalkR enables you to stalk anyone on instagram and twitter. Get notified when someone you want to stalk change their account privacy or post a new tweet on twitter.
+StalkR enables you to stalk anyone on instagram and twitter. Get notified when someone you want to stalk changes its account privacy or post a new tweet on twitter.
 
 ## Getting Started
 
