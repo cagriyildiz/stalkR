@@ -7,6 +7,7 @@ const webpush = require('web-push');
 require('dotenv').config();
 
 const instagramRoutes = require('./api/routes/instagram');
+const twitterRoutes = require('./api/routes/twitter');
 const webpushRoutes = require('./api/routes/webpush');
 
 mongoose.connect(
@@ -20,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'client')));
 app.use(bodyParser.json());
 
 app.use('/instagram', instagramRoutes);
+app.use('/twitter', twitterRoutes);
 app.use('/webpush', webpushRoutes);
 
 webpush.setVapidDetails(
