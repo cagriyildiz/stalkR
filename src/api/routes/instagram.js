@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const scraper = require('../../services/scraper');
+const scraper = require('../../services/instagram/scraper');
 
 router.get('/all', async (req, res, next) => {
     const username = req.query.username;
