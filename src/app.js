@@ -11,10 +11,10 @@ const twitterRoutes = require('./api/routes/twitter');
 const webpushRoutes = require('./api/routes/webpush');
 
 mongoose.connect(
-    'mongodb+srv://' + process.env.MONGO_ATLAS_SRV + ':' 
-    + process.env.MONGO_ATLAS_PW 
-    + '@stalkr-xrauw.mongodb.net/test?retryWrites=true', 
-    { useNewUrlParser: true }
+  'mongodb+srv://' + process.env.MONGO_ATLAS_SRV + ':'
+  + process.env.MONGO_ATLAS_PW
+  + '@stalkr-xrauw.mongodb.net/test?retryWrites=true',
+  {useNewUrlParser: true}
 );
 
 app.use(express.static(path.join(__dirname, 'client')));
@@ -25,9 +25,9 @@ app.use('/twitter', twitterRoutes);
 app.use('/webpush', webpushRoutes);
 
 webpush.setVapidDetails(
-    'mailto:cagriyild@gmail.com',
-    process.env.PUBLIC_VAPID_KEY,
-    process.env.PRIVATE_VAPID_KEY
+  'mailto:cagriyild@gmail.com',
+  process.env.PUBLIC_VAPID_KEY,
+  process.env.PRIVATE_VAPID_KEY
 );
 
 module.exports = app;
