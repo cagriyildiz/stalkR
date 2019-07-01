@@ -6,7 +6,11 @@ const stalkList = (props) => {
   const display = props.active ? "block" : "none";
   return (
     <ul id={props.id} className="collection" style={{marginTop: 0, display: display}}>
-      <StalkListItem/>
+      {props.stalkingPeopleList.map(person => (
+        <StalkListItem
+          img={person.img} name={person.name} username={person.username}
+          accountPrivacy={person.accountPrivacy}/>
+      ))}
     </ul>
   );
 };
